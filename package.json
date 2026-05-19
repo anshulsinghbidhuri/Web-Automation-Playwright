@@ -1,0 +1,19 @@
+{
+  "name": "playwright-web-automation",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "npx playwright test @automationexercise",
+    "feature": "node ./bin/runFeature.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@cucumber/cucumber": "^12.9.0",
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.8.0"
+  }
+}
