@@ -2,6 +2,7 @@ import { Given, When, Then } from '@cucumber/cucumber';
 import assert from 'assert';
 import { AutomationExerciseLogin } from '../Pages/AutomationExerciseLogin.js';
 import { genrateRandomEmail, genrateRandomUsername ,genrateMobileNumber} from '../Support/helperFuntion.js';
+import { waitForDebugger } from 'inspector';
 
 let loginPage;
 const randomUsername = genrateRandomUsername();
@@ -38,4 +39,19 @@ Then('User delete the account', async function () {
     await loginPage.deleteAccountVerify();
     await loginPage.clickContinue();
 
+});
+
+When('User click on login button', async function () {
+    await loginPage.clickSignupLogin();
+    await loginPage.assertTitleLogin();
+});
+
+Then('User fill incorrect email and password', async function () {
+   await loginPage.fillLoginDetails(randomEmail, 'Password123');
+});
+
+Then('user Click login button with incorrect credentials', async function () {
+await loginPage.clickLoginButton(); 
+await this.page.waitForTimeout(2000);   
+await loginPage.assertLoginError();
 });
