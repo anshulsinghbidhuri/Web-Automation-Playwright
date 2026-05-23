@@ -3,6 +3,7 @@ import assert from 'assert';
 import { AutomationExerciseLogin } from '../Pages/AutomationExerciseLogin.js';
 import { genrateRandomEmail, genrateRandomUsername ,genrateMobileNumber} from '../Support/helperFuntion.js';
 import { waitForDebugger } from 'inspector';
+import userCredentials from '../Support/config.js';
 
 let loginPage;
 const randomUsername = genrateRandomUsername();
@@ -18,13 +19,18 @@ Given('Login page Automation Exercise', async function () {
 
 When('User click on Signup button', async function () {
     await loginPage.clickSignupLogin();
-    await loginPage.assertSignupLoginVisible();
 });
 
-Then('user fill Username and email address', async function () {
+Then(/user fill Username and email address with (new|existing) credentials/, async function (type) {
+    if(type === 'existing'){
+    await loginPage.fillSignupForm(userCredentials.username, userCredentials.email);
+    await loginPage.clickSignupButton();
+    await loginPage.existSignupError();
+    }else{
     await loginPage.fillSignupForm(randomUsername, randomEmail);
     await loginPage.clickSignupButton();
     await loginPage.assertTitleSignup();
+    }
 });
 
 Then('User fill the details and create account', async function () {
@@ -46,12 +52,24 @@ When('User click on login button', async function () {
     await loginPage.assertTitleLogin();
 });
 
-Then('User fill incorrect email and password', async function () {
-   await loginPage.fillLoginDetails(randomEmail, 'Password123');
+Then(/User fill (incorrect|correct) email and password/, async function (type) {
+
+    if(type === 'correct'){
+        await loginPage.fillLoginDetails(userCredentials.email, userCredentials.password);
+    }else{
+        await loginPage.fillLoginDetails(randomEmail, 'Password123');
+    }
 });
 
-Then('user Click login button with incorrect credentials', async function () {
-await loginPage.clickLoginButton(); 
-await this.page.waitForTimeout(2000);   
-await loginPage.assertLoginError();
+Then(/user Click login button with (incorrect|correct) credentials/, async function (type) {
+await loginPage.clickLoginButton();
+if(type === 'correct'){
+    await loginPage.assertLoginSuccess();
+}else{
+    await loginPage.assertLoginError();
+}   
+});
+
+Then('User Logout from the account', async function () {
+    await loginPage.clickLogoutButton();
 });

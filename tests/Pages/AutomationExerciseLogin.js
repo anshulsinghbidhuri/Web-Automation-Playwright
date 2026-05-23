@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-
+import userCredentials from '../Support/config.js';
 export class AutomationExerciseLogin {
 
     constructor(page) {
@@ -107,6 +107,10 @@ export class AutomationExerciseLogin {
     return this.page.getByRole('button', { name: 'Login' });
    }
 
+   logOutButton(){
+    return this.page.getByRole('link', { name: 'logout' });
+   }
+
 
 
 
@@ -162,6 +166,14 @@ export class AutomationExerciseLogin {
         await this.loginButton().click();
      }
 
+     async clickLogoutButton(){
+        await this.logOutButton().click();
+     }
+
+      async assertLoginSuccess() {
+        await expect(this.page.getByText('Logged in as ' + userCredentials.username)).toBeVisible();
+    }
+
 
 
 
@@ -190,6 +202,10 @@ export class AutomationExerciseLogin {
 
     async assertLoginError() {
       await expect( this.page.getByText('Your email or password is incorrect!')).toBeVisible();
+    }
+
+    async existSignupError(){
+        await expect(this.page.getByText('Email Address already exist!')).toBeVisible();
     }
 
 }
