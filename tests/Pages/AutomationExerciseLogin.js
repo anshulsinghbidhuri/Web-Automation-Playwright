@@ -1,3 +1,5 @@
+import { expect } from "@playwright/test";
+import userCredentials from '../Support/config.js';
 export class AutomationExerciseLogin {
 
     constructor(page) {
@@ -92,7 +94,26 @@ export class AutomationExerciseLogin {
    deleteAccountButton() {
     return this.page.getByRole('link', { name: 'Delete Account' });
    }
+
+   passwordLogin(){
+    return this.page.getByPlaceholder('Password');
+   }
+
+   emailLogin(){
+   return this.page.locator('//input[@data-qa="login-email"]');
+   }
    
+   loginButton(){
+    return this.page.getByRole('button', { name: 'Login' });
+   }
+
+   logOutButton(){
+    return this.page.getByRole('link', { name: 'logout' });
+   }
+
+
+
+
     // Functions
     async clickSignupLogin() {
         await this.clicksignuplogin().click();
@@ -136,6 +157,27 @@ export class AutomationExerciseLogin {
         await this.deleteAccountButton().click();
     }
 
+     async fillLoginDetails(email, password){
+        await this.emailLogin().fill(email);
+        await this.passwordLogin().fill(password);
+    }
+
+     async clickLoginButton(){
+        await this.loginButton().click();
+     }
+
+     async clickLogoutButton(){
+        await this.logOutButton().click();
+     }
+
+      async assertLoginSuccess() {
+        await expect(this.page.getByText('Logged in as ' + userCredentials.username)).toBeVisible();
+    }
+
+
+
+
+
     // Assertions
 
     async assertTitleSignup(){
@@ -152,6 +194,18 @@ export class AutomationExerciseLogin {
 
     async deleteAccountVerify(){
         return this.page.getByText('ACCOUNT DELETED!').isVisible();
-    }   
+    }
+    
+    async assertTitleLogin(){
+       await expect(this.page.getByText('Login to your account')).toBeVisible();
+    }
+
+    async assertLoginError() {
+      await expect( this.page.getByText('Your email or password is incorrect!')).toBeVisible();
+    }
+
+    async existSignupError(){
+        await expect(this.page.getByText('Email Address already exist!')).toBeVisible();
+    }
 
 }
