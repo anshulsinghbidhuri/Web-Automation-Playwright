@@ -31,6 +31,10 @@ export class RandomCase {
         return this.page.locator('[data-qa="submit-button"]');
      }
 
+     TestCasesButton(){
+        return this.page.getByRole('link', { name: 'Test Cases' }).first();
+     }
+    
 
     //Methods
 
@@ -49,6 +53,18 @@ export class RandomCase {
         await this.SubmitButton().click();
         }
 
+        async clickTestCases(){
+            await this.TestCasesButton().click();
+        }
+
+        async openTestCase(testCaseTitle) {
+        const heading = this.page.getByRole('link', {name: testCaseTitle, exact: true,}).first();
+        await expect(heading).toBeVisible();
+        await heading.dblclick();
+    }
+        
+
+
     //Assertions
 
 
@@ -58,6 +74,10 @@ export class RandomCase {
 
     getFormSubmissionAssertion(){
         return expect(this.page.getByText('Success! Your details have been submitted successfully.')).toBeVisible();
+    }
+
+    getTestCasesPageAssertion(){
+        return expect(this.page.getByRole('heading', { name: 'Below is the list of test Cases for you to practice the Automation. Click on the scenario for detailed Test Steps:' })).toBeVisible();
     }
     
 }

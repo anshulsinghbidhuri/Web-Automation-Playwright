@@ -12,3 +12,8 @@ Feature: Random Case Testing
     | TestName | Test Subject  | This is a test message for the get in touch section. |
     Then user submit the form
     
+    Scenario: verify Web site Test case page
+    Given user click on Test Cases button
+    When user should navigate to test cases page successfully
+    Then user click on the test cases for Details of the test cases
+
