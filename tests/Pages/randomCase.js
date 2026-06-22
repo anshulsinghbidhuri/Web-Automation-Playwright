@@ -34,7 +34,22 @@ export class RandomCase {
      TestCasesButton(){
         return this.page.getByRole('link', { name: 'Test Cases' }).first();
      }
-    
+
+    submitButtonSubscription() {
+    return this.page.locator('#subscribe');
+    }
+
+     CartButton(){
+        return this.page.getByRole('link', { name: 'Cart' }).first();
+     }
+
+     ArrowButton(){
+        return this.page.locator('//i[@class="fa fa-angle-up"]');
+     }
+
+     apiTestingButton(){
+        return this.page.getByRole('link', { name: 'API Testing' }).first();
+     }
 
     //Methods
 
@@ -62,8 +77,34 @@ export class RandomCase {
         await expect(heading).toBeVisible();
         await heading.dblclick();
     }
-        
 
+        async pageScrollDown(){
+        await this.page.evaluate(() => {window.scrollTo(0, document.body.scrollHeight)});
+        }
+
+        async pageScrollUp(){
+        await this.page.evaluate(() => {window.scrollTo(0, 0)});
+        }
+
+        async fillSubscriptionField(email){
+            await this.EnterEmail().fill(email);
+        }
+
+        async submitSubscriptionButton(){
+            await this.submitButtonSubscription().click();
+        }
+
+        async clickCartButton(){
+            await this.CartButton().click();
+        }
+
+        async clickArrowButton(){
+            await this.ArrowButton().click();
+        }
+
+        async clickApiTestingButton(){
+            await this.apiTestingButton().click();
+        }
 
     //Assertions
 
@@ -78,6 +119,21 @@ export class RandomCase {
 
     getTestCasesPageAssertion(){
         return expect(this.page.getByRole('heading', { name: 'Below is the list of test Cases for you to practice the Automation. Click on the scenario for detailed Test Steps:' })).toBeVisible();
+    }
+
+    getSubscriptionSuccessMessageAssertion(){
+        return expect(this.page.getByText('You have been successfully subscribed!')).toBeVisible();
+    }
+    getViewSubscritionHeadingAssertion(){
+        return expect(this.page.getByRole('heading', { name: 'Subscription' })).toBeVisible();
+    }
+
+    getViewArrowButtonAssertionTopPage(){
+        return expect(this.page.getByRole('heading', { name: 'Full-Fledged practice website for Automation Engineers' })).toBeVisible();
+    }
+
+    getApiTestingPageAssertion(){
+        return expect(this.page.getByRole('heading', { name: 'APIs List for practice' })).toBeVisible();
     }
     
 }
