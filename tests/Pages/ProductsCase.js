@@ -80,6 +80,17 @@ export class ProductsCase {
         return this.page.getByText('Continue');
     }
 
+    categoryLocator(categoryName) {
+        return this.page.locator(`a[data-toggle="collapse"][href="#${categoryName}"]`).first();
+    }
+
+    subCategoryLocator(categoryName, subCategoryName) {
+        return this.page.locator(`#${categoryName} a:has-text("${subCategoryName}")`).first();
+    }
+
+    brandLocator(brandName) {
+        return this.page.locator(`.brands-name a:has-text("${brandName}")`).first();
+    }
     //Methods
     async clickOnProductsButton() {
         await this.ProductsButton().click();
@@ -142,6 +153,16 @@ export class ProductsCase {
 
     async clickOnContinueButton() {
         await this.continueButton().click();
+    }
+
+    async clickOnCategory(categoryName, subCategoryName) {
+        await this.categoryLocator(categoryName).click();
+        await expect(this.page.locator(`#${categoryName}.panel-collapse`)).toBeVisible();
+        await this.subCategoryLocator(categoryName, subCategoryName).click();
+    }
+
+    async clickOnBrand(brandName) {
+        await this.brandLocator(brandName).click();
     }
 
     //Assertions

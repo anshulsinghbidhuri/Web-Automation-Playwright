@@ -78,3 +78,15 @@ Then ('user see the order confirmed and Download Invoice and Verify Invoice is d
 Then ('User click on Continue button and verify user should be navigated to the home page successfully', async function () {
     await productsPage.clickOnContinueButton();
 });
+
+When('User click on the All Category to verify user should be able to view products under that category', async function () {
+    await productsPage.clickOnCategory("Women", "Tops");
+    await productsPage.clickOnCategory("Men", "Tshirts");
+});
+
+Then('User click on the All Brands to verify user should be able to view products under that brand', async function () {
+    await productsPage.clickOnBrand("Polo");
+    await productsPage.clickOnBrand("H&M");
+    await productsPage.clickOnBrand("Allen Solly Junior");
+
+});
