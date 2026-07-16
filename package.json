@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "npx playwright test @automationexercise",
-    "feature": "node ./bin/runFeature.js"
+    "feature": "node ./bin/runFeature.js",
+    "report": "node ./bin/generateReport.js"
   },
   "keywords": [],
   "author": "",

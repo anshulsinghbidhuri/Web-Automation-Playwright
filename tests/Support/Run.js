@@ -1,5 +1,6 @@
 import { Before, After, setDefaultTimeout } from '@cucumber/cucumber';
 import { chromium } from 'playwright';
+import './reporting.js';
 
 setDefaultTimeout(60 * 1000);
 
