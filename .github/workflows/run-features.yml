@@ -1,0 +1,93 @@
+name: Run Cucumber Features (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      feature:
+        description: 'Feature file name (without .feature) to run. Example: ProductsCase'
+        required: false
+        default: ''
+      tag:
+        description: 'Run scenarios matching this tag (with or without @). Example: @ans or ans'
+        required: false
+        default: ''
+      run_all:
+        description: 'Set to true to run all features under tests/Feature'
+        required: false
+        default: 'false'
+
+jobs:
+  test-feature:
+    name: Run feature(s) and collect reports
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run specified feature / tag / all
+        env:
+          FEATURE: ${{ github.event.inputs.feature }}
+          TAG: ${{ github.event.inputs.tag }}
+          RUN_ALL: ${{ github.event.inputs.run_all }}
+        run: |
+          set -e
+          echo "Feature input: '$FEATURE'"
+          echo "Tag input: '$TAG'"
+          echo "Run all: '$RUN_ALL'"
+          if [ "${FEATURE}" != "" ]; then
+            echo "Running feature: ${FEATURE}"
+            node ./bin/runFeature.js "${FEATURE}"
+          elif [ "${TAG}" != "" ]; then
+            echo "Running tag: ${TAG}"
+            # ensure tag starts with @
+            if [[ "${TAG}" == @* ]]; then
+              node ./bin/runFeature.js "${TAG}"
+            else
+              node ./bin/runFeature.js "@${TAG}"
+            fi
+          else
+            # Default behavior: run all features if RUN_ALL is true or not provided
+            if [ "${RUN_ALL}" = "true" ] || [ "${RUN_ALL}" = "" ]; then
+              echo "Running all features in tests/Feature"
+              npx cucumber-js "tests/Feature" --import tests/Support --import tests/StepDefintions || true
+            else
+              echo "No input provided and run_all is not true. Exiting with failure."
+              exit 1
+            fi
+          fi
+
+      - name: Archive reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cucumber-report
+          path: reports/
+          retention-days: 30
+
+      - name: Upload playwright report (if exists)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
