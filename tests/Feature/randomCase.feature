@@ -1,4 +1,5 @@
 @randomCase
+@regression
 Feature: Random Case Testing
   Describe: This feature tests the random case functionality of the application, ensuring that it can handle various input cases effectively.
 
