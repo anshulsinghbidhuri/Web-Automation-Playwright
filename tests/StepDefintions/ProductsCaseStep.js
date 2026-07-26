@@ -1,5 +1,5 @@
 import { Given, When, Then, Before } from '@cucumber/cucumber';
-import {ProductsCase} from '../Pages/productsCase.js';
+import {ProductsCase} from '../Pages/ProductsCase.js';
 import { genrateRandomEmail, genrateRandomUsername ,genrateMobileNumber} from '../Support/helperFuntion.js';
 
 let productsPage;
