@@ -14,7 +14,8 @@ on:
       run_all:
         description: 'Set to true to run all features under tests/Feature'
         required: false
-        default: 'false'
+        default: true
+        type: boolean
 
 jobs:
   test-feature:
@@ -66,12 +67,12 @@ jobs:
               node ./bin/runFeature.js "@${TAG}"
             fi
           else
-            # Default behavior: run all features if RUN_ALL is true or not provided
+            # Default behavior: run all features when no feature/tag is provided.
             if [ "${RUN_ALL}" = "true" ] || [ "${RUN_ALL}" = "" ]; then
               echo "Running all features in tests/Feature"
-              npx cucumber-js "tests/Feature" --import tests/Support --import tests/StepDefintions || true
+              node ./bin/runFeature.js all
             else
-              echo "No input provided and run_all is not true. Exiting with failure."
+              echo "No feature or tag provided and run_all is false. Exiting with failure."
               exit 1
             fi
           fi

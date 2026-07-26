@@ -1,7 +1,6 @@
 
 export function genrateRandomEmail() {
-    const randomEmail = Math.random().toString(36).substring(2, 10)+'@example.com';
-    return randomEmail;
+   return `${crypto.randomUUID()}@gmail.com`;
 }
 
 export function genrateRandomUsername() {
