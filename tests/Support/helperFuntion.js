@@ -1,7 +1,7 @@
 
 export function genrateRandomEmail() {
-    const randomEmail = Math.random().toString(36).substring(2, 10)+'@example.com';
-    return randomEmail;
+  const random = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  return `${random}@gmail.com`;
 }
 
 export function genrateRandomUsername() {

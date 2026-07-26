@@ -1,4 +1,5 @@
 @automationexercise
+@regression
 Feature: Login for Automation Exercise
 Describe: This feature tests the login and signup functionality of the Automation Exercise website, including user signup, login with valid and invalid credentials, and logout.
 

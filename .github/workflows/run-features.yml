@@ -1,4 +1,4 @@
-name: Run Cucumber Features (manual)
+name: Run Cucumber Features
 
 on:
   workflow_dispatch:
@@ -14,7 +14,8 @@ on:
       run_all:
         description: 'Set to true to run all features under tests/Feature'
         required: false
-        default: 'false'
+        default: true
+        type: boolean
 
 jobs:
   test-feature:
@@ -28,7 +29,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Cache node modules
         uses: actions/cache@v4
@@ -66,12 +67,12 @@ jobs:
               node ./bin/runFeature.js "@${TAG}"
             fi
           else
-            # Default behavior: run all features if RUN_ALL is true or not provided
+            # Default behavior: run all features when no feature/tag is provided.
             if [ "${RUN_ALL}" = "true" ] || [ "${RUN_ALL}" = "" ]; then
               echo "Running all features in tests/Feature"
-              npx cucumber-js "tests/Feature" --import tests/Support --import tests/StepDefintions || true
+              node ./bin/runFeature.js all
             else
-              echo "No input provided and run_all is not true. Exiting with failure."
+              echo "No feature or tag provided and run_all is false. Exiting with failure."
               exit 1
             fi
           fi
@@ -82,7 +83,7 @@ jobs:
         with:
           name: cucumber-report
           path: reports/
-          retention-days: 30
+          retention-days: 3
 
       - name: Upload playwright report (if exists)
         if: always()
@@ -90,4 +91,4 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report/
-          retention-days: 30
+          retention-days: 3

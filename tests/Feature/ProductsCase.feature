@@ -1,4 +1,5 @@
 @ProductsCase 
+@regression
 Feature: Products Case
 Describe: This feature tests the products functionality of the application, ensuring that it can handle various product-related operations effectively.
 

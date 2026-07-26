@@ -4,10 +4,19 @@ import fs from 'fs';
 import path from 'path';
 
 const name = process.argv[2];
-if (!name) {
-  console.error('Usage: npm run feature -- <FeatureName> OR npm run feature -- @tagName');
-  process.exit(1);
+const shouldRunAll = !name || ['all', '--all', 'ALL'].includes(name);
+
+if (shouldRunAll) {
+  const command = `npx cucumber-js "tests/Feature" --import tests/Support --import tests/StepDefintions`;
+  try {
+    execSync(command, { stdio: 'inherit', shell: true });
+    process.exit(0);
+  } catch (error) {
+    process.exit(error.status || 1);
+  }
 }
+
+console.log(`Running request: ${name}`);
 
 let command;
 if (name.startsWith('@')) {
